@@ -1,0 +1,44 @@
+services:
+  db: # PostgreSQL
+    image: postgres:16-alpine # image
+    environment: # credentials env theke
+      POSTGRES_USER: ${POSTGRES_USER:-school} # user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_dev_only} # dev-only default, .env diye change kora jay
+      POSTGRES_DB: ${POSTGRES_DB:-school_admission} # database
+    volumes:
+      - pgdata:/var/lib/postgresql/data # data persist
+    healthcheck: # ready check
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-school} -d ${POSTGRES_DB:-school_admission}"] # command
+      interval: 3s # 3s por por
+      timeout: 3s # timeout
+      retries: 20 # 20 bar
+  backend: # .NET API
+    build: ./backend # Dockerfile folder
+    environment:
+      DB_CONNECTION: Host=db;Port=5432;Database=${POSTGRES_DB:-school_admission};Username=${POSTGRES_USER:-school};Password=${POSTGRES_PASSWORD:-change_me_dev_only} # DB connection
+      HOLD_DURATION_SECONDS: ${HOLD_DURATION_SECONDS:-600} # hold meyad
+    depends_on:
+      db:
+        condition: service_healthy # DB ready hole start
+    ports:
+      - "8080:8080" # http://localhost:8080
+  frontend: # React + nginx (Part 2)
+    build: ./frontend # Dockerfile folder
+    environment:
+      BACKEND_URL: http://backend:8080 # backend URL
+    depends_on:
+      - backend # backend age
+    ports:
+      - "3000:80" # http://localhost:3000
+  tests: # backend test, shudhu --profile test dile chole
+    profiles: ["test"] # normal up-e chalbe na
+    build:
+      context: ./backend # context
+      dockerfile: Dockerfile.tests # test Dockerfile
+    environment:
+      TEST_DB_CONNECTION: Host=db;Port=5432;Database=school_test;Username=${POSTGRES_USER:-school};Password=${POSTGRES_PASSWORD:-change_me_dev_only} # alada test DB
+    depends_on:
+      db:
+        condition: service_healthy # DB ready
+volumes:
+  pgdata: # named volume
