@@ -1,0 +1,26 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, "Noto Sans Bengali", sans-serif; background: #f4f6f8; color: #1d2433; }
+.wrap { max-width: 900px; margin: 0 auto; padding: 16px; }
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.1rem; margin: 0 0 10px; }
+section { background: #fff; border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+input { flex: 1; min-width: 180px; padding: 10px; border: 1px solid #c4cad4; border-radius: 6px; font-size: 1rem; }
+input.small { flex: 0 0 140px; min-width: 100px; }
+button { padding: 10px 14px; border: 0; border-radius: 6px; background: #2457d6; color: #fff; font-size: .95rem; cursor: pointer; }
+button.sec { background: #6b7280; }
+button:disabled { background: #b8bfcc; cursor: not-allowed; }
+.hint { color: #5b6475; margin: 8px 0 0; }
+.msg { padding: 10px 12px; border-radius: 6px; margin: 10px 0; }
+.msg.ok { background: #e3f6e8; color: #14532d; }
+.msg.err { background: #fde8e8; color: #7f1d1d; }
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 8px; border-bottom: 1px solid #e5e8ee; white-space: nowrap; }
+.acts { display: flex; gap: 6px; }
+.dim { opacity: .6; }
+.badge { padding: 3px 8px; border-radius: 12px; font-size: .85rem; background: #e5e8ee; }
+.badge.HELD { background: #fff3cd; }
+.badge.CONFIRMED { background: #d1f2d9; }
+.badge.EXPIRED { background: #f9d6d6; }
+.badge.CANCELLED { background: #e5e8ee; }
