@@ -16,9 +16,11 @@ services:
       retries: 20 # 20 bar
   backend: # .NET API
     build: ./backend # Dockerfile folder
+    restart: on-failure # startup fail hole Docker abar chalabe
     environment:
       DB_CONNECTION: Host=db;Port=5432;Database=${POSTGRES_DB:-school_admission};Username=${POSTGRES_USER:-school};Password=${POSTGRES_PASSWORD:-change_me_dev_only} # DB connection
       HOLD_DURATION_SECONDS: ${HOLD_DURATION_SECONDS:-600} # hold meyad
+      Logging__LogLevel__Microsoft.EntityFrameworkCore.Database.Command: Warning # prottek 5s-er SQL log bondho
     depends_on:
       db:
         condition: service_healthy # DB ready hole start

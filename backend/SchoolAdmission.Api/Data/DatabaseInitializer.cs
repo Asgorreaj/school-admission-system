@@ -31,7 +31,7 @@ public static class DatabaseInitializer // startup DB init with retry
             catch (Exception ex) when (attempt < maxAttempts && !ct.IsCancellationRequested) // not the last attempt
             {
                 log.LogWarning("DB init attempt {Attempt}/{Max} failed: {Type}: {Msg}", attempt, maxAttempts, ex.GetType().Name, ex.InnerException?.Message ?? ex.Message); // reason
-                await LogDnsAsync(b.Host, log); // DNS diagnostics
+                await LogDnsAsync(b.Host ?? "", log); // DNS diagnostics
                 await Task.Delay(TimeSpan.FromSeconds(Math.Min(attempt, 5)), ct); // 1s, 2s ... max 5s
             }
         }
@@ -39,7 +39,7 @@ public static class DatabaseInitializer // startup DB init with retry
 
     private static async Task LogDnsAsync(string host, ILogger log) // shows whether name resolution works
     {
-        if (IPAddress.TryParse(host, out _)) return; // already an IP
+        if (string.IsNullOrEmpty(host) || IPAddress.TryParse(host, out _)) return; // already an IP
         try // lookup
         {
             var addrs = await Dns.GetHostAddressesAsync(host); // resolve
