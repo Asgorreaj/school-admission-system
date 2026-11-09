@@ -25,10 +25,7 @@ app.Use(async (ctx, next) => // global error handler
     }
 });
 
-using (var scope = app.Services.CreateScope()) // startup-e table
-{
-    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated(); // table na thakle banabe
-}
+await DatabaseInitializer.InitAsync(app.Services, conn, app.Logger); // retry + diagnostics
 
 app.MapControllers(); // route
 app.Run(); // chalu
