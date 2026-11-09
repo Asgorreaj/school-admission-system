@@ -2,4 +2,5 @@ bin/
 obj/
 node_modules/
 dist/
-.env
+.envdocker-compose.override.yml
+docker-compose.override.yml
