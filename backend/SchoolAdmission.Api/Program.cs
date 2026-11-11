@@ -10,6 +10,8 @@ builder.Services.AddSingleton(new AdmissionOptions(secs)); // options
 builder.Services.AddScoped<AdmissionService>(); // service
 builder.Services.AddHostedService<HoldExpiryWorker>(); // expiry worker
 builder.Services.AddControllers(); // controllers
+builder.Services.AddEndpointsApiExplorer(); // Swagger endpoint discovery
+builder.Services.AddSwaggerGen(); // Swagger generator
 
 var app = builder.Build(); // app toiri
 
@@ -27,5 +29,7 @@ app.Use(async (ctx, next) => // global error handler
 
 await DatabaseInitializer.InitAsync(app.Services, conn, app.Logger); // retry + diagnostics
 
+app.UseSwagger(); // Swagger JSON
+app.UseSwaggerUI(); // Swagger browser interface
 app.MapControllers(); // route
 app.Run(); // chalu

@@ -2,9 +2,12 @@ server {
   listen 80;
   root /usr/share/nginx/html;
   index index.html;
+  resolver 127.0.0.11 valid=10s ipv6=off;
 
   location /api/ {
-    proxy_pass ${BACKEND_URL}/;
+    set $backend_url ${BACKEND_URL};
+    rewrite ^/api/(.*)$ /$1 break;
+    proxy_pass $backend_url;
     proxy_set_header Host $host;
   }
 
